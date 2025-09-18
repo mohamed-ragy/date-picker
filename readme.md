@@ -4,30 +4,31 @@
 [![GitHub release](https://img.shields.io/github/v/release/mohamed-ragy/date-picker)](https://github.com/mohamed-ragy/date-picker/releases)
 ![GitHub license](https://img.shields.io/github/license/mohamed-ragy/date-picker)
 
-A lightweight, modern, and responsive date picker for web apps — supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`) that installs automatically.
 
+### A lightweight, modern, and responsive date picker for web apps — supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`) that installs automatically.
 
-![Demo](./assets/demo.png)
+## Try the live demo → [View Demo](#) *(coming soon)*
+
+![Demo](https://raw.githubusercontent.com/mohamed-ragy/date-picker/main/assets/demo.png)
 
 # Documentation
 
 ## Table of Contents
 1. [What is this?](#what-is-this)
 2. [Features](#features)
-3. [Live demo](#live-demo)
-4. [Installation](#installation)
-5. [Quick Start](#quick-start)
-6. [Core Concepts](#core-concepts)  
-7. [Styling & Theming](#styling--theming)  
-8. [Options](#options)  
-9. [Methods (Public API)](#methods-public-api)  
-10. [Localization](#localization-i18n)  
-11. [Accessibility](#accessibility)  
-12. [Recipes](#recipes)   
-13. [Framework Usage](#framework-usage)  
-14. [Performance](#performance)  
-15. [FAQ](#faq)  
-16. [License](#license)
+3. [Installation](#installation)
+4. [Quick Start](#quick-start)
+5. [Core Concepts](#core-concepts)  
+6. [Styling & Theming](#styling--theming)  
+7. [Options](#options)  
+8. [Methods (Public API)](#methods-public-api)  
+9. [Localization](#localization-i18n)  
+10. [Accessibility](#accessibility)  
+11. [Recipes](#recipes)   
+12. [Framework Usage](#framework-usage)  
+13. [Performance](#performance)  
+14. [FAQ](#faq)  
+15. [License](#license)
 
 ## What is this?
 This is a modern, responsive date picker that works in any web project.
@@ -52,9 +53,6 @@ If you're building a dashboard, analytics filter, or anything that needs a clean
 - Fast to load, no extra dependencies
 - Supports localization and custom language overrides
 - Clean API for integration, with useful events and methods
-
-## Live demo
-[View demo](#) — coming soon
 
 ## Installation
 
