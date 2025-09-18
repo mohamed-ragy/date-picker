@@ -1,10 +1,11 @@
-# @ragyjs/dom-renderer
+# @ragyjs/date-picker
 [![npm](https://img.shields.io/npm/v/@ragyjs/date-picker)](https://www.npmjs.com/package/@ragyjs/date-picker)
 ![npm](https://img.shields.io/npm/dm/@ragyjs/date-picker)
-![GitHub release (latest by date)](https://img.shields.io/github/v/mohamed-ragy/date-picker)
-![GitHub](https://img.shields.io/github/license/mohamed-ragy/date-picker)
+[![GitHub release](https://img.shields.io/github/v/release/mohamed-ragy/date-picker)](https://github.com/mohamed-ragy/date-picker/releases)
+![GitHub license](https://img.shields.io/github/license/mohamed-ragy/date-picker)
 
-A lightweight, modern, and responsive date picker for web apps — supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. No dependencies. Framework-agnostic.
+A lightweight, modern, and responsive date picker for web apps — supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`) that installs automatically.
+
 
 ![Demo](./assets/demo.png)
 
@@ -26,7 +27,7 @@ A lightweight, modern, and responsive date picker for web apps — supports sing
 13. [Framework Usage](#framework-usage)  
 14. [Performance](#performance)  
 15. [FAQ](#faq)  
-18. [License](#license)
+16. [License](#license)
 
 ## What is this?
 This is a modern, responsive date picker that works in any web project.
@@ -78,6 +79,7 @@ import '@ragyjs/date-picker/style.css';
 
 The package is ESM-only. You can use it in any modern frontend stack (Vite, Webpack, etc.) or plain `<script type="module">` in the browser.
 
+**SSR note:** Import is safe in SSR, but only create the picker in the browser (e.g., inside `useEffect`/`onMounted`).
 
 ## Quick Start
 
@@ -126,7 +128,7 @@ You can also call `.format()` on the picker instance to get the selected value(s
 
 ```js
 const picker = new DatePicker(container, { mode: 'single' });
-const formatted = picker.format('dd-mm-yyyy'); // "07-10-2025"
+const formatted = picker.format('dd-mm-YYYY'); // "07-10-2025"
 ```
 
 If you're using presets like “Last 7 Days” or “This Month”, the range is filled automatically when selected.
@@ -328,7 +330,7 @@ Here’s a complete list of available options:
 - **Default**: `'dd-M-YY'`
 - **What it does**:  
   Controls how dates are displayed inside the input.  
-  You can use tokens like `dd`, `mm`, `yyyy`, `M`, `D`, etc.  
+  You can use tokens like `dd`, `mm`, `YYYY`, `M`, `D`, etc.  
   See [Localization](#localization-i18n) for full token list.
 
 ---
@@ -481,7 +483,7 @@ picker.set({ day: 12, month: 9, year: 2025 });
   See [Localization](#localization-i18n) for available tokens.
 
 ```js
-picker.format('dd/mm/yyyy'); // → "12/09/2025"
+picker.format('dd/mm/YYYY'); // → "12/09/2025"
 ```
 
 ---
@@ -535,6 +537,8 @@ picker.format('dd/mm/yyyy'); // → "12/09/2025"
   - `'lastWeek'`
   - `'lastMonth'`
   - `'lastYear'`
+  - `'custom'`
+  
 ```js
 picker.selectPeriod('last30days');
 ```
@@ -663,10 +667,10 @@ This ensures the calendar grid stays correct.
 
 ### Formatting dates with `.format()`
 
-The `.format()` method lets you convert the selected date(s) into a string, using tokens like `dd`, `mm`, `yyyy`, etc.
+The `.format()` method lets you convert the selected date(s) into a string, using tokens like `dd`, `mm`, `YYYY`, etc.
 
 ```js
-picker.format('dd/mm/yyyy'); // → "17/10/2025"
+picker.format('dd/mm/YYYY'); // → "17/10/2025"
 ```
 
 This does **not** change how dates are displayed inside the picker — it’s only for formatting output when you need a specific string format (e.g., to send in a request or show somewhere else).
@@ -721,10 +725,8 @@ There’s also a live region (`aria-live="polite"`) to announce updates when mon
 
 ### Focus behavior
 
-When the picker opens, it traps focus inside itself.  
-When closed, the entire content becomes inert and can’t be tabbed into accidentally.
-
-This ensures screen reader and keyboard users won’t get stuck inside or interact with it while hidden.
+When the picker opens, its content becomes focusable and keyboard-friendly.  
+When it closes, the internal content becomes inert so you can’t tab into it by mistake.
 
 ## Recipes
 
