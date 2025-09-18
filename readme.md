@@ -5,7 +5,7 @@
 ![GitHub license](https://img.shields.io/github/license/mohamed-ragy/date-picker)
 
 
-### A lightweight, modern, and responsive date picker for web apps — supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`) that installs automatically.
+### A lightweight, modern, and responsive date picker for web apps - supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`) that installs automatically.
 
 ## Try the live demo → [View Demo](https://ragyjs.com/packages/date-picker)
 
@@ -36,7 +36,7 @@ It supports both single date and date range selection, and comes with helpful pr
 
 The styling is fully customizable using simple CSS variables.
 Keyboard navigation and screen reader support are built in.
-It uses a minimal rendering helper under the hood (@ragyjs/dom-renderer), but has no other dependencies — no frameworks, no large libraries.
+It uses a minimal rendering helper under the hood (@ragyjs/dom-renderer), but has no other dependencies - no frameworks, no large libraries.
 
 You can drop it into any page, connect it to your logic, and it just works.
 If you're building a dashboard, analytics filter, or anything that needs a clean, flexible way to pick dates, this tool was made for that.
@@ -44,11 +44,11 @@ If you're building a dashboard, analytics filter, or anything that needs a clean
 ## Features
 - Supports both single date and date range selection
 - Includes built-in presets like “Today”, “Last 7 Days”, “This Month”, etc.
-- Works with any framework — or no framework at all
+- Works with any framework - or no framework at all
 - Fully responsive layout, adapts to small screens
 - Easy to customize with CSS variables
 - Accessible by keyboard and screen readers
-- Simple, unopinionated design — style it your way
+- Simple, unopinionated design - style it your way
 - Lightweight: uses only a small DOM renderer (@ragyjs/dom-renderer)
 - Fast to load, no extra dependencies
 - Supports localization and custom language overrides
@@ -152,8 +152,8 @@ You’ll receive this format from `onApply`, and you’ll also use it when passi
 
 You can choose between two modes:
 
-- `'single'` — the picker lets users select just one date  
-- `'range'` — the picker shows a two-part range selector with optional presets
+- `'single'` - the picker lets users select just one date  
+- `'range'` - the picker shows a two-part range selector with optional presets
 
 The value returned by `onApply` depends on the mode:
 
@@ -591,16 +591,16 @@ The date picker supports multiple languages and custom labels. You can choose fr
 
 You can set the `locale` option to one of the supported language codes:
 
-- `'en'` — English (default)  
-- `'fr'` — French  
-- `'es'` — Spanish  
-- `'de'` — German  
-- `'uk'` — Ukrainian  
-- `'ar'` — Arabic  
-- `'it'` — Italian  
-- `'pt'` — Portuguese  
-- `'zh'` — Chinese  
-- `'ja'` — Japanese
+- `'en'` - English (default)  
+- `'fr'` - French  
+- `'es'` - Spanish  
+- `'de'` - German  
+- `'uk'` - Ukrainian  
+- `'ar'` - Arabic  
+- `'it'` - Italian  
+- `'pt'` - Portuguese  
+- `'zh'` - Chinese  
+- `'ja'` - Japanese
 
 ```js
 new DatePicker(container, {
@@ -671,7 +671,7 @@ The `.format()` method lets you convert the selected date(s) into a string, usin
 picker.format('dd/mm/YYYY'); // → "17/10/2025"
 ```
 
-This does **not** change how dates are displayed inside the picker — it’s only for formatting output when you need a specific string format (e.g., to send in a request or show somewhere else).
+This does **not** change how dates are displayed inside the picker - it’s only for formatting output when you need a specific string format (e.g., to send in a request or show somewhere else).
 
 To control the **display inside the picker**, use the `format` option when creating it.
 
@@ -697,7 +697,7 @@ These tokens are localized automatically based on the selected locale or your cu
 
 ## Accessibility
 
-The date picker is designed to be fully accessible out of the box — no extra configuration needed.
+The date picker is designed to be fully accessible out of the box - no extra configuration needed.
 
 ### Keyboard navigation
 
@@ -789,7 +789,7 @@ const value = picker.format('YYYY-mm-dd');
 // Returns string in single mode or array in range mode
 ```
 
-This doesn’t affect how dates appear inside the picker — it’s just for output.
+This doesn’t affect how dates appear inside the picker - it’s just for output.
 
 ---
 
@@ -832,7 +832,7 @@ Just make sure the theme exists in your CSS.
 
 ## Framework Usage
 
-The date picker works with any frontend framework — or no framework at all.  
+The date picker works with any frontend framework - or no framework at all.  
 It doesn't rely on global DOM access, jQuery, or custom lifecycle hooks.
 
 You create it by passing in a DOM element and options.  
@@ -920,17 +920,17 @@ onBeforeUnmount(() => {
 ### Notes
 
 - Make sure to call `.destroy()` when your component unmounts, especially in React/Vue/Svelte apps.
-- You can use multiple instances on the same page — each is isolated.
+- You can use multiple instances on the same page - each is isolated.
 
 ## Performance
 
 The picker is lightweight and doesn’t ship any third-party libraries.
 
-- There are **no re-renders** — the component only updates when needed
+- There are **no re-renders** - the component only updates when needed
 - DOM updates are minimal and scoped to what changes (no full redraws)
 - It’s safe to use multiple instances on the same page
 
-If you're building complex or high-traffic UIs, the picker stays responsive and cheap to run — even when embedded in large dashboards or filters.
+If you're building complex or high-traffic UIs, the picker stays responsive and cheap to run - even when embedded in large dashboards or filters.
 
 ## FAQ / Troubleshooting
 
@@ -990,7 +990,7 @@ To change how the date appears inside the UI, use the `format` option.
 
 ### Can I use it without a framework?
 
-Yes — it works with plain JavaScript.  
+Yes - it works with plain JavaScript.  
 Just pass a DOM element and some options:
 
 ```js
@@ -1001,7 +1001,7 @@ new DatePicker(document.querySelector('#picker'), { mode: 'single' });
 
 ### Can I have more than one picker on the page?
 
-Yes — multiple pickers are fully supported. Each instance is isolated and independent.
+Yes - multiple pickers are fully supported. Each instance is isolated and independent.
 
 ---
 
@@ -1019,6 +1019,6 @@ This will remove all DOM listeners and references.
 
 This project is open source and available under the MIT License.
 
-You can use it freely in personal or commercial projects, modify it, or redistribute it — just keep the original license file and attribution.
+You can use it freely in personal or commercial projects, modify it, or redistribute it - just keep the original license file and attribution.
 
 For full details, see the [LICENSE](./LICENSE) file.
