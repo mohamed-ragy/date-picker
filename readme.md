@@ -209,7 +209,7 @@ This file defines the layout, theming, animations, and responsive behavior of th
 
 ### Built-in themes
 
-The picker currently includes the following built-in theme:
+The picker currently includes the following built-in themes:
 
 - `cerulean` – clean and light with a blue highlight (default)
 - `raspberry` – bold and playful with raspberry tones
