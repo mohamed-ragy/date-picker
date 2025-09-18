@@ -1,0 +1,63 @@
+{
+    "name": "@ragyjs/date-picker",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Responsive, lightweight date picker with range selection, presets, theming, and full accessibility. Framework-agnostic. No dependencies.",
+    "module": "dist/index.mjs",
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs"
+        }
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "vite build",
+        "postbuild": "sass src/style.scss dist/style.css --no-source-map --style=compressed",
+        "dev": "vite"
+    },
+    "keywords": [
+        "date picker",
+        "datepicker",
+        "calendar",
+        "range picker",
+        "date range",
+        "range selection",
+        "preset ranges",
+        "vanilla js",
+        "javascript",
+        "css variables",
+        "accessible",
+        "a11y",
+        "keyboard support",
+        "themeable",
+        "no dependencies",
+        "framework agnostic",
+        "ragyjs"
+    ],
+    "author": "Ragy",
+    "license": "MIT",
+    "sideEffects": false,
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mohamed-ragy/date-picker.git"
+    },
+    "bugs": {
+        "url": "https://github.com/mohamed-ragy/date-picker/issues"
+    },
+    "homepage": "https://github.com/mohamed-ragy/date-picker#readme",
+    "devDependencies": {
+        "sass": "^1.92.1",
+        "terser": "^5.44.0",
+        "vite": "^7.1.5"
+    },
+    "dependencies": {
+        "@ragyjs/dom-renderer": "^1.4.1"
+    }
+}
