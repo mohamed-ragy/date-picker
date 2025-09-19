@@ -3,13 +3,17 @@
 ![npm](https://img.shields.io/npm/dm/@ragyjs/date-picker)
 [![GitHub release](https://img.shields.io/github/v/release/mohamed-ragy/date-picker)](https://github.com/mohamed-ragy/date-picker/releases)
 ![GitHub license](https://img.shields.io/github/license/mohamed-ragy/date-picker)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-lightgrey?style=flat&logo=github)](https://github.com/sponsors/mohamed-ragy)
 
 
-### A lightweight, modern, and responsive date picker for web apps - supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`) that installs automatically.
+#### A lightweight, modern, and responsive date picker for web apps - supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`).
 
 ## Try the live demo → [View Demo](https://ragyjs.com/packages/date-picker)
 
+
 ![Demo](https://raw.githubusercontent.com/mohamed-ragy/date-picker/main/assets/demo.png)
+
+> If you find this project useful, consider giving it a ⭐ on GitHub. It helps others discover it and keeps the project going!
 
 # Documentation
 
@@ -48,8 +52,8 @@ If you're building a dashboard, analytics filter, or anything that needs a clean
 - Fully responsive layout, adapts to small screens
 - Easy to customize with CSS variables
 - Accessible by keyboard and screen readers
-- Simple, unopinionated design - style it your way
-- Lightweight: uses only a small DOM renderer (@ragyjs/dom-renderer)
+- Comes with built-in themes out of the box
+- Easily customizable — override styles with CSS variables or create your own themes
 - Fast to load, no extra dependencies
 - Supports localization and custom language overrides
 - Clean API for integration, with useful events and methods
@@ -122,15 +126,6 @@ new DatePicker(container, {
 });
 ```
 
-You can also call `.format()` on the picker instance to get the selected value(s) as strings:
-
-```js
-const picker = new DatePicker(container, { mode: 'single' });
-const formatted = picker.format('dd-mm-YYYY'); // "07-10-2025"
-```
-
-If you're using presets like “Last 7 Days” or “This Month”, the range is filled automatically when selected.
-
 ## Core Concepts
 
 Before you dive deeper, here are a few things to understand about how this date picker works.
@@ -165,35 +160,22 @@ The value returned by `onApply` depends on the mode:
 All date ranges are inclusive.  
 If a user selects “October 1” to “October 7”, the range includes both dates.
 
-### Presets
-
-In range mode, the picker includes useful presets by default:
-
-- Today  
-- Yesterday  
-- Last 7 Days  
-- This Week  
-- Last Month  
-- This Year  
-- ...and more
-
-When a user selects a preset, the value updates automatically.
-
 ### Start of week
 
-By default, weeks start on **Sunday (0)**, but you can change that with the `startOfWeek` option.
+By default, weeks start on **Sunday (0)**, but you can change that using the `startOfWeek` option.
+
+You can pass either a number (`0`–`6`) or a string (like `'mon'`, `'tue'`, etc.).
 
 ```js
-startOfWeek: 1 // makes Monday the first day of the week
+new DatePicker(container, {
+  startOfWeek: 'mon' // makes Monday the first day of the week
+  // Valid values: 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'
+});
 ```
-
-You can also pass strings like `'mon'`, `'tue'`, etc.
-
-
 
 ## Styling & Theming
 
-The date picker is styled entirely using **CSS variables**, so it’s easy to customize and theme without touching the JavaScript.
+The date picker is styled using **CSS variables**, so it’s easy to customize and theme without touching the JavaScript.
 
 ### CSS import
 
@@ -204,8 +186,6 @@ Make sure you import the CSS file in your app:
 ```js
 import '@ragyjs/date-picker/style.css';
 ```
-
-This file defines the layout, theming, animations, and responsive behavior of the picker.
 
 ### Built-in themes
 
@@ -224,7 +204,6 @@ new DatePicker(container, {
   theme: 'cerulean'
 });
 ```
-
 
 ### Custom themes with CSS variables
 
@@ -257,7 +236,30 @@ new DatePicker(container, {
 });
 ```
 
-You can define as many themes as you like and switch them based on context or user preference.
+### Instance-level overrides with the `style` option
+
+You don’t have to define a full theme class to customize colors.  
+You can pass CSS variables directly using the `style` option when creating the picker.
+
+```js
+new DatePicker(container, {
+  theme: 'cerulean',
+  style: {
+    '--color-primary': '#E63946',
+    '--color-background': '#fffef8',
+    '--shadow-day': '0 0 6px rgba(0,0,0,.25)'
+  }
+});
+```
+
+You can also change variables at runtime:
+
+```js
+picker.picker.style.setProperty('--color-primary', '#7B61FF');
+```
+
+This approach is perfect for dynamic or per-user theming, without writing custom CSS classes.
+
 
 ### CSS variables available
 
@@ -347,8 +349,9 @@ Here’s a complete list of available options:
 
 - **Type**: `object`
 - **What it does**:  
-  Adds inline styles directly to the `.rjs-datePicker` container.  
-  Useful for quick tweaks or dynamic width/height.
+  Adds inline styles to the picker root.  
+  You can use this to set layout styles (like width), or override theme variables per instance.
+
 
 ---
 
@@ -703,7 +706,7 @@ The date picker is designed to be fully accessible out of the box - no extra con
 
 Users can navigate and interact using only the keyboard:
 
-- `Arrow keys`: move across days
+- `Arrow keys`: move across days, or navigate preset periods (in range mode)
 - `Enter` or `Space`: select a date
 - `Escape`: close the picker
 - `Tab` and `Shift+Tab`: move between focusable areas
@@ -720,11 +723,6 @@ The picker uses semantic HTML roles and ARIA attributes to provide meaningful in
 - All buttons and icons have accessible labels
 
 There’s also a live region (`aria-live="polite"`) to announce updates when months or values change.
-
-### Focus behavior
-
-When the picker opens, its content becomes focusable and keyboard-friendly.  
-When it closes, the internal content becomes inert so you can’t tab into it by mistake.
 
 ## Recipes
 
@@ -759,8 +757,6 @@ To clear the picker value manually:
 ```js
 picker.set([null, null]); // works for both single and range
 ```
-
-You can also let the user click the built-in **Clear** button and handle it with `onClear`.
 
 ---
 
@@ -818,17 +814,6 @@ new DatePicker(container, {
 This ensures users can’t select more than 30 days, and not beyond November 1st, 2025.
 
 ---
-
-### Change theme dynamically
-
-If you want to switch themes at runtime:
-
-```js
-picker.picker.classList.remove('rjs-cerulean');
-picker.picker.classList.add('rjs-dark');
-```
-
-Just make sure the theme exists in your CSS.
 
 ## Framework Usage
 
@@ -1022,3 +1007,4 @@ This project is open source and available under the MIT License.
 You can use it freely in personal or commercial projects, modify it, or redistribute it - just keep the original license file and attribution.
 
 For full details, see the [LICENSE](./LICENSE) file.
+
