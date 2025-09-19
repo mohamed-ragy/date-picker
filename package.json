@@ -2,7 +2,7 @@
     "name": "@ragyjs/date-picker",
     "version": "1.0.0",
     "type": "module",
-    "description": "Responsive, lightweight date picker with range selection, presets, theming, and full accessibility. Framework-agnostic. No dependencies.",
+    "description": "Responsive, lightweight date picker with range selection, presets, theming, and full accessibility. Framework-agnostic.",
     "module": "dist/index.mjs",
     "exports": {
         ".": {
@@ -52,6 +52,10 @@
         "url": "https://github.com/mohamed-ragy/date-picker/issues"
     },
     "homepage": "https://ragyjs.com/date-picker",
+    "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/mohamed-ragy"
+    },
     "devDependencies": {
         "sass": "^1.92.1",
         "terser": "^5.44.0",

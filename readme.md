@@ -3,7 +3,7 @@
 [![npm downloads](https://img.shields.io/npm/dm/@ragyjs/date-picker)](https://www.npmjs.com/package/@ragyjs/date-picker)
 [![GitHub license](https://img.shields.io/github/license/mohamed-ragy/date-picker)](https://github.com/mohamed-ragy/date-picker/blob/main/LICENSE)
 [![GitHub release](https://img.shields.io/github/v/release/mohamed-ragy/date-picker)](https://github.com/mohamed-ragy/date-picker/releases)
-[![GitHub Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-lightgrey?style=flat&logo=github)](https://github.com/sponsors/mohamed-ragy)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-lightgrey?style=flat&logo=github)](https://github.com/sponsors/mohamed-ragy)
 
 
 #### A lightweight, modern, and responsive date picker for web apps - supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`).
@@ -33,6 +33,7 @@
 13. [Performance](#performance)  
 14. [FAQ](#faq)  
 15. [License](#license)
+16. [Support](#support)
 
 ## What is this?
 This is a modern, responsive date picker that works in any web project.
@@ -1008,3 +1009,7 @@ You can use it freely in personal or commercial projects, modify it, or redistri
 
 For full details, see the [LICENSE](./LICENSE) file.
 
+## Support
+
+If you find this project helpful, please consider [sponsoring me on GitHub](https://github.com/sponsors/mohamed-ragy).  
+Even small contributions help keep the project active and maintained.
