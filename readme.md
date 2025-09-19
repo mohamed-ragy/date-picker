@@ -1,8 +1,8 @@
 # @ragyjs/date-picker
 [![npm](https://img.shields.io/npm/v/@ragyjs/date-picker)](https://www.npmjs.com/package/@ragyjs/date-picker)
-![npm](https://img.shields.io/npm/dm/@ragyjs/date-picker)
+[![npm downloads](https://img.shields.io/npm/dm/@ragyjs/date-picker)](https://www.npmjs.com/package/@ragyjs/date-picker)
 [![GitHub release](https://img.shields.io/github/v/release/mohamed-ragy/date-picker)](https://github.com/mohamed-ragy/date-picker/releases)
-![GitHub license](https://img.shields.io/github/license/mohamed-ragy/date-picker)
+[![GitHub license](https://img.shields.io/github/license/mohamed-ragy/date-picker)](https://github.com/mohamed-ragy/date-picker/blob/main/LICENSE)
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-lightgrey?style=flat&logo=github)](https://github.com/sponsors/mohamed-ragy)
 
 
