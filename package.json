@@ -1,12 +1,15 @@
 {
     "name": "@ragyjs/date-picker",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "module",
     "description": "Responsive, lightweight date picker with range selection, presets, theming, and full accessibility. Framework-agnostic.",
     "module": "dist/index.mjs",
     "exports": {
         ".": {
             "import": "./dist/index.mjs"
+        },
+        "./style.css": {
+            "default": "./dist/style.css"
         }
     },
     "files": [
