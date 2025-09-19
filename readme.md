@@ -6,7 +6,7 @@
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-lightgrey?style=flat&logo=github)](https://github.com/sponsors/mohamed-ragy)
 
 
-#### A lightweight, modern, and responsive date picker for web apps - supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`).
+> A lightweight, modern, and responsive date picker for web apps - supports single and range selection, built-in presets (Today, Last 7 Days, etc.), flexible theming with CSS variables, and full keyboard and screen reader accessibility. Framework‑agnostic. Zero peer dependencies. Ships with one small runtime helper (`@ragyjs/dom-renderer`).
 
 ## Try the live demo → [View Demo](https://ragyjs.com/packages/date-picker)
 
