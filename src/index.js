@@ -73,7 +73,7 @@ export class DatePicker {
     focus() {
         if (!this.picker) return;
         this.picker.focus();
-        this.picker.classList.add('rjs-focus');
+        this.picker.classList.add('rjs-focus', 'rjs-focus-force');
         this.picker.setAttribute('aria-expanded', 'true');
         this.picker.querySelector('.rjs-wrapper').removeAttribute('inert');
         return this;
@@ -82,7 +82,7 @@ export class DatePicker {
     blur() {
         if (!this.picker) return;
         this.picker.blur();
-        this.picker.classList.remove('rjs-focus');
+        this.picker.classList.remove('rjs-focus', 'rjs-focus-force');
         this.picker.setAttribute('aria-expanded', 'false');
         this.picker.querySelector('.rjs-wrapper').setAttribute('inert', '');
         return this;

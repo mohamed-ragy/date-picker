@@ -41,8 +41,8 @@ export class Builder {
                 },
                 focusout: (event) => {
                     if (!event.currentTarget.contains(event.relatedTarget)) {
-                        this.dp.picker.setAttribute('aria-expanded', 'false');
                         this.dp.picker.classList.remove('rjs-focus');
+                        this.dp.picker.setAttribute('aria-expanded', 'false');
                         this.dp.picker.querySelector('.rjs-wrapper').setAttribute('inert', '');
                     }
                 }

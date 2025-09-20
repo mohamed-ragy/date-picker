@@ -493,8 +493,10 @@ picker.format('dd/mm/YYYY'); // → "12/09/2025"
 ### picker.focus()
 
 - **What it does**:  
-  Opens the picker and focuses the root element.  
-  Use this if you want to open the picker programmatically.
+  Opens the picker and focuses the root element.    
+  Use this if you want to open the picker programmatically.   
+  Once opened programmatically, the picker will remain open until you call `blur()` manually or the user clicks the **Apply** button.
+
 
 ---
 

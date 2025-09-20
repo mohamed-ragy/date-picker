@@ -386,7 +386,8 @@ $themes: (
         }
     }
 
-    &.rjs-focus:focus-within:not(.rjs-loading) {
+    &.rjs-focus:focus-within:not(.rjs-loading),
+    &.rjs-focus-force:not(.rjs-loading) {
         > .rjs-wrapper {
             border: 1px solid transparent !important;
             outline:2px solid var(--color-primary);
