@@ -110,7 +110,7 @@ export class Builder {
             }),
             on:{
                 click:this.dp.e.periodsClickHandler.bind(this.dp.e),
-                keydown:this.dp.e.preiodsKeydownHandler.bind(this.dp.e),
+                keydown:this.dp.e.periodsKeydownHandler.bind(this.dp.e),
                 focus:this.dp.e.periodsFocusHandler.bind(this.dp.e),
                 blur:this.dp.e.periodsBlurHandler.bind(this.dp.e),
             }
@@ -160,14 +160,14 @@ export class Builder {
                                 pointerdown:this.dp.e.daysPointerdownHandler.bind(this.dp.e),
                                 pointerup:this.dp.e.daysPointerupHandler.bind(this.dp.e),
                                 pointerleave:this.dp.e.daysPointerleaveHandler.bind(this.dp.e),
-                                pointercancel:this.dp.e.daysPointerleaveHandler.bind(this.dp.e),
+                                pointercancel:this.dp.e.daysPointercancelHandler.bind(this.dp.e),
                                 pointermove:{
                                     handler:this.dp.e.daysPointermoveHandler.bind(this.dp.e),
-                                    throttle:50
+                                    throttle:10
                                 },
                                 mousemove:{
                                     handler:this.dp.e.daysMousemoveHandler.bind(this.dp.e),
-                                    throttle:50,
+                                    throttle:10
                                 }
                             } : {
                                 focus:() => this.dp.picker.querySelector('.rjs-day:first-child').classList.add('rjs-highlight'),

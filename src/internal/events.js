@@ -14,7 +14,7 @@ export class Events {
         this.dp.selectPeriod(period, false);
     }
 
-    preiodsKeydownHandler(event) {
+    periodsKeydownHandler(event) {
         const key = event.key.toLowerCase();
         const periodsEl = event.target.closest('.rjs-periods');
         let selectedPeriod = periodsEl.querySelector('.rjs-period.rjs-focus');
@@ -46,7 +46,6 @@ export class Events {
         const target = event.target.querySelector('.rjs-period.rjs-focus');
         target ? target.classList.remove('rjs-focus') : null;
     }
-    ///
 
     daysGridKeydownHandler(event) {
         const key = event.key.toLowerCase();
@@ -137,7 +136,14 @@ export class Events {
     }
 
     daysPointerdownHandler(event) {
+        
         if (this.o.mode !== 'range') return;
+
+        const grid = event.currentTarget;
+        if (grid?.setPointerCapture) {
+            try { grid.setPointerCapture(event.pointerId); } catch {}
+        }
+
         const dayEl = event.target.closest('.rjs-day');
         if (!dayEl) return;
 
@@ -157,11 +163,35 @@ export class Events {
 
     daysPointerupHandler(event) {
         if (this.o.mode !== 'range') return;
+
+        const grid = event.currentTarget;
+        if (grid?.releasePointerCapture) {
+            try { grid.releasePointerCapture(event.pointerId); } catch {}
+        }
+
         this.draggingDay = null;
     }
 
-    daysPointerleaveHandler() {
+    daysPointercancelHandler(event) {
         if (this.o.mode !== 'range') return;
+
+        const grid = event.currentTarget;
+        if (grid?.releasePointerCapture) {
+            try { grid.releasePointerCapture(event.pointerId); } catch {}
+        }
+        
+        this.draggingDay = null;
+        this.dp.c.setDisplayDate();
+    }
+
+    daysPointerleaveHandler(event) {
+        if (this.o.mode !== 'range') return;
+
+        if (event.buttons) return;
+
+        const grid = event.currentTarget;
+        if (grid?.hasPointerCapture && grid.hasPointerCapture(event.pointerId)) return;
+
         this.draggingDay = null;
         this.dp.c.setDisplayDate();
     }
@@ -227,8 +257,6 @@ export class Events {
         this.dp.c.pick(dayEl);
         this.dp.picker.querySelector('.rjs-day.rjs-highlight')?.classList?.remove?.('rjs-highlight');
     }
-
-    //
 
 
 }

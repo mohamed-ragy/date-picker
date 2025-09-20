@@ -256,6 +256,9 @@ $themes: (
                         }
                     }
                     > .rjs-days {
+                        touch-action: none;
+                        overscroll-behavior: contain;
+                        user-select: none;
                         width: calc(100% - 20px);
                         margin-inline: 10px;
                         padding-block: 10px;
