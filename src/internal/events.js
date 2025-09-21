@@ -139,11 +139,6 @@ export class Events {
         
         if (this.o.mode !== 'range') return;
 
-        const grid = event.currentTarget;
-        if (grid?.setPointerCapture) {
-            try { grid.setPointerCapture(event.pointerId); } catch {}
-        }
-
         const dayEl = event.target.closest('.rjs-day');
         if (!dayEl) return;
 
@@ -164,21 +159,11 @@ export class Events {
     daysPointerupHandler(event) {
         if (this.o.mode !== 'range') return;
 
-        const grid = event.currentTarget;
-        if (grid?.releasePointerCapture) {
-            try { grid.releasePointerCapture(event.pointerId); } catch {}
-        }
-
         this.draggingDay = null;
     }
 
     daysPointercancelHandler(event) {
         if (this.o.mode !== 'range') return;
-
-        const grid = event.currentTarget;
-        if (grid?.releasePointerCapture) {
-            try { grid.releasePointerCapture(event.pointerId); } catch {}
-        }
         
         this.draggingDay = null;
         this.dp.c.setDisplayDate();
@@ -186,11 +171,6 @@ export class Events {
 
     daysPointerleaveHandler(event) {
         if (this.o.mode !== 'range') return;
-
-        if (event.buttons) return;
-
-        const grid = event.currentTarget;
-        if (grid?.hasPointerCapture && grid.hasPointerCapture(event.pointerId)) return;
 
         this.draggingDay = null;
         this.dp.c.setDisplayDate();
@@ -253,10 +233,166 @@ export class Events {
 
     daysClickHandler(event) {
         const dayEl = event.target.closest('.rjs-day');
-        if (!dayEl) return;
+        if (!dayEl || dayEl.classList.contains('rjs-disabled')) return;
         this.dp.c.pick(dayEl);
         this.dp.picker.querySelector('.rjs-day.rjs-highlight')?.classList?.remove?.('rjs-highlight');
     }
 
+    headDisplayDateMonthClickHandler(event) {
+        const dropDown = event.target.closest('.rjs-displayMonth').querySelector('.rjs-dropDown');
+        if (!dropDown) return;
 
+        if (document.activeElement !== dropDown) {
+            requestAnimationFrame(() => {
+                const maxDate = this.o.maxDate ?? null;
+                const minDate = this.o.minDate ?? null;
+
+                dropDown.querySelectorAll('.rjs-dropDownItem').forEach(item => {
+                    item.classList.remove('rjs-selected');
+                    item.style.display = '';
+                    const targetTimestamp = toTimestamp({year:this.dp.displayDate.year, month:parseInt(item.getAttribute('data-month'), 10), day:1});
+                                                
+                    if (maxDate) {
+                        const maxTimestamp = toTimestamp({year:maxDate.year, month:maxDate.month, day:1});
+                        if (targetTimestamp > maxTimestamp) item.style.display = 'none';
+                    }
+
+                    if (minDate) {
+                        const minTimestamp = toTimestamp({year:minDate.year, month:minDate.month, day:1});
+                        if (targetTimestamp < minTimestamp) item.style.display = 'none';
+                    }
+                    
+                });
+
+                dropDown.focus();
+
+                const target = dropDown.querySelector(`[data-month="${this.dp.displayDate.month}"]`);
+                if (target) {
+                    target.classList.add('rjs-selected')
+                    dropDown.scrollTop = target.offsetTop - dropDown.offsetTop;
+                }
+            });
+
+            return;
+        }
+
+        const item = event.target.closest('.rjs-dropDownItem');
+        if (!item) return;
+
+        const month = parseInt(item.getAttribute('data-month'), 10);
+        if (!month) return;
+
+        this.dp.picker.querySelector('.rjs-displayYear .rjs-dropDown').focus();
+        this.dp.c.animate('fade', () => {
+            this.dp.c.setDisplayDate({month, year:this.dp.displayDate.year});
+        })
+    }
+
+    headDisplayDateYearClickHandler(event) {
+        const dropDown = event.target.closest('.rjs-displayYear').querySelector('.rjs-dropDown');
+        if (!dropDown) return;
+
+        if (document.activeElement !== dropDown) {
+            requestAnimationFrame(() => {
+                const items = dropDown.querySelectorAll('.rjs-dropDownItem').forEach(item => item.classList.remove('rjs-selected'))
+                dropDown.focus();
+                const target = dropDown.querySelector(`[data-year="${this.dp.displayDate.year}"]`);
+                if (target) {
+                    target.classList.add('rjs-selected')
+                    dropDown.scrollTop = target.offsetTop - dropDown.offsetTop;
+                }                
+            });
+            return;
+        }
+
+        const item = event.target.closest('.rjs-dropDownItem');
+        if (!item) return;
+
+        const year = parseInt(item.getAttribute('data-year'), 10);
+        if (!year) return;
+
+        const maxDate = this.o.maxDate ?? null;
+        const minDate = this.o.minDate ?? null;
+        let month = this.dp.displayDate.month;
+        const targetTimestamp = toTimestamp({year, month, day:1});
+
+        if (minDate) {
+            const minTimestamp = toTimestamp({year:minDate.year, month:minDate.month, day:1});
+            if (targetTimestamp < minTimestamp) month = minDate.month;
+        }
+
+        if (maxDate) {
+            const maxTimestamp = toTimestamp({year:maxDate.year, month:maxDate.month, day:1});
+            if (targetTimestamp > maxTimestamp) month = maxDate.month;
+        }
+
+        this.dp.picker.querySelector('.rjs-arrowRight').focus();
+        this.dp.c.animate('fade', () => {
+            this.dp.c.setDisplayDate({month:month, year});
+        })
+    }
+
+    headDisplayDateDropDownKeyDownHandler(event) {
+        const key = event.key.toLowerCase();
+        const dropDown = event.target.closest('.rjs-dropDown');
+
+        if (key !== 'arrowup' && key !== 'arrowdown' && key !== 'enter' && key !== ' ') {
+            return;
+        }
+
+        event.preventDefault();
+
+        let selected = dropDown.querySelector('.rjs-dropDownItem.rjs-selected');
+        let highlighted = dropDown.querySelector('.rjs-dropDownItem.rjs-highlighted');
+
+        if (selected && !highlighted) highlighted = selected;
+
+        let target;
+
+        if (key === 'enter' || key === ' ' && highlighted) {
+            
+            let month = highlighted.getAttribute('data-month');
+            let year = highlighted.getAttribute('data-year');
+
+            if (!year) {
+                year = this.dp.displayDate.year;
+                this.dp.picker.querySelector('.rjs-displayYear .rjs-dropDown').focus();
+
+            }
+            if (!month) {
+                month = this.dp.displayDate.month;
+                this.dp.picker.querySelector('.rjs-arrowRight').focus();
+            }
+
+            
+            dropDown.querySelectorAll('.rjs-dropDownItem').forEach(item => item.classList.remove('rjs-highlighted', 'rjs-selected'))
+            highlighted.classList.add('rjs-selected');
+            dropDown.scrollTop = highlighted.offsetTop - dropDown.offsetTop;
+
+            this.dp.c.animate('fade', () => {
+                this.dp.c.setDisplayDate({month, year});
+            });
+            
+            return
+        }
+
+        if (key === 'arrowup') {
+            if (!highlighted) target = dropDown.querySelector('.rjs-dropDownItem:nth-child(1)')
+            else if (highlighted.previousElementSibling) target = highlighted.previousElementSibling; 
+            else target = dropDown.querySelector('.rjs-dropDownItem:last-child');
+        
+        } else if (key === 'arrowdown') {
+            if (!highlighted) target = dropDown.querySelector('.rjs-dropDownItem:last-child')
+            else if (highlighted.nextElementSibling) target = highlighted.nextElementSibling; 
+            else target = dropDown.querySelector('.rjs-dropDownItem:nth-child(1)');
+
+        }
+
+        dropDown.querySelectorAll('.rjs-dropDownItem').forEach(item => item.classList.remove('rjs-highlighted'))
+        target.classList.add('rjs-highlighted');
+        dropDown.scrollTop = target.offsetTop - dropDown.offsetTop;
+
+
+
+    }
 }

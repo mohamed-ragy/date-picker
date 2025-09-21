@@ -2,7 +2,7 @@ import { DomRenderer } from "@ragyjs/dom-renderer";
 import { Builder } from "./internal/builder.js";
 import { Events } from "./internal/events.js";
 import { Controller } from "./internal/controller.js";
-import { randomName, formatDate, getPresetRanges, isSameDate, today, parseStartOfWeek } from "./utils/helpers.js";
+import { randomName, formatDate, getPresetRanges, isSameDate, today, parseStartOfWeek, toTimestamp } from "./utils/helpers.js";
 import { locales } from "./utils/locales.js";
 
 export class DatePicker {
@@ -19,17 +19,15 @@ export class DatePicker {
         this.picker = null;
 
         if (this.o.value) this._value = this.o.value;
-        else if (this.o.mode === 'range') this._value = [today(), today()];
-        else this._value = [today(), null];
+        else this._value = [null, null];
 
-        this.displayDate = null;
+        this.displayDate = this.o.minDate && toTimestamp(today()) < toTimestamp(this.o.minDate) ? this.o.minDate : today();
+
 
         this.locale = locales(this.o.locale ?? 'en');
 
-        if ('trans' in this.o && typeof(this.o.trans) === 'object') {
-            Object.entries(this.o.trans).forEach(([key, val]) => {
-                this.locale[key] = val;
-            });
+        if (this.o.trans && typeof this.o.trans === 'object') {
+            Object.entries(this.o.trans).forEach(([key, val]) => { this.locale[key] = val; });
         }
 
         this.pickerId = randomName();
@@ -64,7 +62,6 @@ export class DatePicker {
         this.days = null;
     }
 
-    ///
     get value() {
        if (this.o.mode === 'range') return this._value;
         else return this._value[0];
@@ -120,7 +117,6 @@ export class DatePicker {
         this.picker.classList.remove('rjs-error');
         return this;
     }
-    //
 
     nextMonth(callback = () => {}) {
         if (!this.displayDate) this.displayDate = today();
@@ -131,6 +127,10 @@ export class DatePicker {
         if (month > 12) {
             month = 1;
             year++;
+        }
+
+        if (this.o.maxDate) {
+            if (toTimestamp({year, month, day:1}) > toTimestamp({year:this.o.maxDate.year, month:this.o.maxDate.month, day:1})) return;
         }
 
         this.displayDate = { year, month, day: 1 };
@@ -149,13 +149,35 @@ export class DatePicker {
         let { year, month } = this.displayDate;
 
         month--;
+
         if (month < 1) {
             month = 12;
             year--;
         }
+        
+        if (this.o.minDate) {
+            if (toTimestamp({year, month, day:1}) < toTimestamp({year:this.o.minDate.year, month:this.o.minDate.month, day:1})) return;
+        }
 
         this.displayDate = { year, month, day: 1 };
         this.c.animate('prev', () => {
+            this.c.setDisplayDate(this.displayDate);
+            if (typeof callback === 'function') callback();
+        });
+
+        return this;
+    }
+
+    goTo(_month, _year, callback = () => {}) {
+        
+        let year, month;
+
+        if (typeof _month === 'object' && _month) { ({ year, month } = _month); }
+        else { month = _month; year = _year; }
+
+        this.displayDate = { year, month, day: 1 };
+
+        this.c.animate('fade', () => {
             this.c.setDisplayDate(this.displayDate);
             if (typeof callback === 'function') callback();
         });

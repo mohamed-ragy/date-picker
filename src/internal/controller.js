@@ -13,7 +13,32 @@ export class Controller {
 
         if (!date) date = this.dp.displayDate ??= this.dp._value[0] ?? today();
 
-        this.dp.picker.querySelector(".rjs-head > .rjs-label").textContent = `${this.dp.locale.monthsLong[date.month - 1]} ${date.year}`;
+        this.dp.displayDate = date;
+
+        const headDisplayDate = this.dp.picker.querySelector(".rjs-head > .rjs-displayDate");
+        headDisplayDate.querySelector('.rjs-displayMonth .rjs-label').textContent = this.dp.locale.monthsLong[date.month - 1];
+        headDisplayDate.querySelector('.rjs-displayYear .rjs-label').textContent = date.year;
+        headDisplayDate.querySelector('.rjs-hiddenlabel').textContent = `${this.dp.locale.monthsLong[date.month - 1]} ${date.year}`;
+
+
+        const prevBtn = this.dp.picker.querySelector('.rjs-arrowLeft');
+        const nextBtn = this.dp.picker.querySelector('.rjs-arrowRight');
+
+        const currentMonthTs = toTimestamp({ year: date.year, month: date.month, day: 1 });
+        const minMonthTs = this.o.minDate ? toTimestamp({ year: this.o.minDate.year, month: this.o.minDate.month, day: 1 }) : null;
+        const maxMonthTs = this.o.maxDate ? toTimestamp({ year: this.o.maxDate.year, month: this.o.maxDate.month, day: 1 }) : null;
+
+        const atMin = minMonthTs != null && currentMonthTs <= minMonthTs;
+        const atMax = maxMonthTs != null && currentMonthTs >= maxMonthTs;
+
+        if (prevBtn) {
+            prevBtn.disabled = !!atMin;
+            prevBtn.setAttribute('aria-disabled', String(!!atMin));
+        }
+        if (nextBtn) {
+            nextBtn.disabled = !!atMax;
+            nextBtn.setAttribute('aria-disabled', String(!!atMax));
+        }
 
         const rawFirstDay = new Date(date.year, date.month - 1, 1).getDay(); 
         const firstDay = (rawFirstDay - this.dp.startOfWeek + 7) % 7;
@@ -180,6 +205,19 @@ export class Controller {
         const month = parseInt(dayEl.getAttribute('data-month'));
         const day = parseInt(dayEl.getAttribute('data-day'));
 
+        const ts = toTimestamp({ year, month, day });
+        const minTs = this.o.minDate ? toTimestamp(this.o.minDate) : null;
+        const maxTs = this.o.maxDate ? toTimestamp(this.o.maxDate) : null;
+        const outOfBounds = (minTs != null && ts < minTs) || (maxTs != null && ts > maxTs);
+
+        if (outOfBounds) {
+            dayEl.classList.add('rjs-disabled');
+            dayEl.setAttribute('aria-disabled', 'true');
+            return;
+        } else {
+            dayEl.classList.remove('rjs-disabled');
+            dayEl.removeAttribute('aria-disabled');
+        }
         if (!this.dp._value) return;
 
         if (this.o.mode === 'single') {
@@ -369,7 +407,7 @@ export class Controller {
     
     clear() {
         this.dp.c.animate('fade', () => {
-            this.dp.displayDate = today();
+            this.dp.displayDate = this.o.minDate ?? today();
             this.dp.set([null, null], true);
         })
         this.o.onClear?.();

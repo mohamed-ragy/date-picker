@@ -226,6 +226,7 @@ Here’s an example:
   --color-error: #d00000;                   /* Error message color */
   --shadow-day: 0px 0px 4px #00000023;      /* Hover shadow on day cells */
   --shadow-button: 0px 0px 2px #00000023;   /* Shadow on buttons */
+  --shadow-dropDown: 0 3px 8px rgba(0,0,0,.24); /* Shadow for month/year dropdown */
 }
 ```
 
@@ -277,6 +278,7 @@ Here’s the full list of CSS variables you can override:
 - `--color-error`  
 - `--shadow-day`  
 - `--shadow-button`
+- `--shadow-dropDown`
 
 
 ## Options
@@ -389,6 +391,8 @@ Here’s a complete list of available options:
 - **Type**: `{ day, month, year }`
 - **What it does**:  
   Limits how early users can select dates.  
+  Navigation (prev/next month arrows and the month/year dropdown) will not move the view beyond this boundary. Programmatic `goTo()` is not clamped by design.
+
 
 ---
 
@@ -397,6 +401,8 @@ Here’s a complete list of available options:
 - **Type**: `{ day, month, year }`
 - **What it does**:  
   Limits how late users can select dates.  
+  Navigation (prev/next month arrows and the month/year dropdown) will not move the view beyond this boundary. Programmatic `goTo()` is not clamped by design.
+
   
 ---
 
@@ -406,6 +412,8 @@ Here’s a complete list of available options:
 - **What it does**:  
   In range mode, limits how long the selected range can be.  
   The range is inclusive (e.g., `7` means start + 6 days).
+  The preset list is filtered automatically so only presets that fit within your `maxRange` (and `minDate`/`maxDate`) are shown.
+
 
 ---
 
@@ -511,7 +519,8 @@ picker.format('dd/mm/YYYY'); // → "12/09/2025"
 
 - **What it does**:  
   Moves the view to the next calendar month.  
-  Calls `callback()` after animation completes (optional).
+  Calls `callback()` after animation completes (optional).    
+  Respects `minDate`/`maxDate` boundaries.
 
 ---
 
@@ -519,7 +528,22 @@ picker.format('dd/mm/YYYY'); // → "12/09/2025"
 
 - **What it does**:  
   Moves the view to the previous calendar month.  
-  Calls `callback()` after animation completes (optional).
+  Calls `callback()` after animation completes (optional).    
+  Respects `minDate`/`maxDate` boundaries.
+
+---
+
+### picker.goTo({ year, month }, callback?)
+
+- **What it does**:  
+  Jumps the view to a specific month/year and runs `callback` after the transition.   
+  This method does **not** clamp to `minDate`/`maxDate`.
+
+```js
+picker.goTo({ year: 2026, month: 1 }, () => {
+  console.log('Now showing January 2026');
+});
+```
 
 ---
 
@@ -541,6 +565,9 @@ picker.format('dd/mm/YYYY'); // → "12/09/2025"
   - `'lastWeek'`
   - `'lastMonth'`
   - `'lastYear'`
+  - `'nextWeek'`
+  - `'nextMonth'`
+  - `'nextYear'`
   - `'custom'`
   
 ```js
@@ -649,6 +676,9 @@ new DatePicker(container, {
   lastWeek: 'Last week',
   lastMonth: 'Last month',
   lastYear: 'Last year',
+  nextWeek: 'Next Week',
+  nextMonth: 'Next Month',
+  nextYear: 'Next Year',
   custom: 'Custom',
   weekdays: [...],         // e.g. ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
   weekDaysShort: [...],    // e.g. ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -724,6 +754,7 @@ The picker uses semantic HTML roles and ARIA attributes to provide meaningful in
 - The calendar grid uses `role="grid"` and `role="gridcell"` for day cells
 - Selected and focused states use `aria-selected` appropriately
 - All buttons and icons have accessible labels
+- Month/year controls are exposed as focusable UI elements and announce the current visible month and year.
 
 There’s also a live region (`aria-live="polite"`) to announce updates when months or values change.
 
@@ -749,6 +780,19 @@ picker.set([
   { day: 1, month: 10, year: 2025 },
   { day: 15, month: 10, year: 2025 }
 ]);
+```
+
+---
+
+### Jump to a specific month/year
+
+You can open the calendar directly at a target month:
+
+```js
+const picker = new DatePicker(container, { mode: 'single' });
+
+// Jump to January 2026 (view only)
+picker.goTo({ year: 2026, month: 1 });
 ```
 
 ---

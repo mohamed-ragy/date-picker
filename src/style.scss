@@ -11,6 +11,7 @@ $themes: (
         color-error:#d00000,
         shadow-day: 0px 0px 4px #00000023,
         shadow-button: 0px 0px 2px #00000023,
+        shadow-dropDown: rgba(0, 0, 0, 0.24) 0px 3px 8px,
     ),
     raspberry: (
         color-primary: #A53860,
@@ -24,6 +25,7 @@ $themes: (
         color-error:#d00000,
         shadow-day: 0px 0px 4px #00000023,
         shadow-button: 0px 0px 2px #00000023,
+        shadow-dropDown: rgba(0, 0, 0, 0.24) 0px 3px 8px,
     ),
     viridian: (
         color-primary: #40826d,
@@ -37,6 +39,7 @@ $themes: (
         color-error:#d00000,
         shadow-day: 0px 0px 4px #052c1c3c,
         shadow-button: 0px 0px 2px #052c1c3c,
+        shadow-dropDown: rgba(0, 0, 0, 0.24) 0px 3px 8px,
     ),
     caribbean: (
         color-primary: #02C39A,
@@ -50,6 +53,7 @@ $themes: (
         color-error:#d00000,
         shadow-day: 0px 0px 4px #00000023,
         shadow-button: 0px 0px 2px #00000023,
+        shadow-dropDown: rgba(0, 0, 0, 0.24) 0px 3px 8px,
     ),
     dark: (
         color-primary: #ededed,
@@ -63,6 +67,7 @@ $themes: (
         color-error:#d00000,
         shadow-day: 0px 0px 4px #00000041,
         shadow-button: 0px 0px 4px #00000041,
+        shadow-dropDown: rgba(0, 0, 0, 0.24) 0px 3px 8px,
     ),
 );
 
@@ -150,6 +155,7 @@ $themes: (
             width: 100%;
             pointer-events: none;
             user-select: none;
+            position: relative;
             display: flex;
             align-items: flex-start;
             justify-content: center;
@@ -162,10 +168,17 @@ $themes: (
                 outline: none;
                 padding: 10px 0;
                 width: 130px;
+                height: 100%;
+                overflow: auto;
                 z-index: 5;
                 border-inline-end:1px solid var(--color-border);
                 background-color: var(--color-background);
-                height: -webkit-fill-available;
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 130px;
+                scrollbar-width: thin;
                 > .rjs-period {
                     padding: 7px 5px;
                     margin-inline: 5px;
@@ -206,6 +219,7 @@ $themes: (
             }
             > .rjs-picker {
                 width: calc(100% - 130px);
+                margin-inline-start: 130px;
                 > .rjs-head {
                     width: 100%;
                     padding: 10px;
@@ -230,11 +244,82 @@ $themes: (
                             stroke:var(--color-icons);
                             background-color: var(--color-background-alt);
                         }
+                        &:disabled{
+                            visibility: hidden;
+                            cursor: auto;
+                        }
                     }
-                    > .rjs-label {
+                    > .rjs-displayDate {
+                        gap:0px;
                         flex-grow: 1;
-                        text-align: center;
                         font-size: 14px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        > .rjs-hiddenlabel {
+                            position: absolute;
+                            width: 1px;
+                            height: 1px;
+                            padding: 0;
+                            margin: -1px;
+                            overflow: hidden;
+                            clip: rect(0 0 0 0);
+                            white-space: nowrap;
+                            border: 0;
+                        }
+                        > .rjs-displayMonth, 
+                        > .rjs-displayYear {
+                            position: relative;
+                            cursor: pointer;
+                            padding:1px 5px;
+                            border-radius: 5px;
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap:2px;
+                            > .rjs-icon {
+                                margin-top:2px;
+                                width:16px;
+                                height:16px;
+                                stroke:var(--color-icons)
+                            }
+                            > .rjs-dropDown {
+                                cursor: auto;
+                                overscroll-behavior: contain;
+                                position: absolute;
+                                box-shadow: var(--shadow-dropDown);
+                                top:20px;
+                                left:0;
+                                border-radius: 4px;
+                                overflow: auto;
+                                z-index: 10;
+                                max-height:200px;
+                                scrollbar-width: thin;
+                                background-color: var(--color-background);
+                                transform: scaleY(0);
+                                opacity: 0;
+                                transform-origin: top;
+                                transition: opacity 100ms cubic-bezier(0.45, 0, 0.55, 1);
+                                &:focus {
+                                    opacity: 1;
+                                    transform: scaleY(1);
+                                }
+                                > .rjs-dropDownItem {
+                                    padding:5px 10px;
+                                    cursor: pointer;
+                                    &.rjs-selected {
+                                        background-color: var(--color-primary) !important;
+                                        color:var(--color-background) !important;
+                                    }
+                                    &:hover:not(.rjs-selected){
+                                        background-color: var(--color-background-alt);
+                                    }
+                                    &.rjs-highlighted {
+                                        background-color: var(--color-background-alt);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 > .rjs-body {
@@ -320,6 +405,15 @@ $themes: (
                             &.rjs-inHover {
                                 opacity: 0.6;
                             }
+                            &.rjs-disabled {
+                                color: var(--color-placeholder);
+                                cursor: not-allowed;
+                                opacity: 0.4;
+                                box-shadow: none !important;
+                                &:hover{
+                                    box-shadow: none !important; 
+                                }
+                            }
                         }
                     }
                     &.rjs-toRight {
@@ -383,6 +477,7 @@ $themes: (
                     display: none !important;
                 }
                 > .rjs-picker {
+                    margin:auto;
                     width: 100%;
                 }
             }
@@ -464,12 +559,15 @@ $themes: (
                 max-height: 0;
                 > .rjs-periods {
                     width: 100%;
+                    position: relative;
                     display: grid;
+                    max-height:200px;
                     grid-template-columns: repeat(2, 1fr);
                     border-inline-end: none;
                     border-bottom: 1px solid var(--color-border);
                 }
                 > .rjs-picker {
+                    margin:auto;
                     width: 100%;
                 }
             }

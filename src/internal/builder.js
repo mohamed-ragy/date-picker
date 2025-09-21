@@ -11,7 +11,9 @@ export class Builder {
             'today': 1, 'yesterday': 1,
             'last7days': 7, 'last30days': 30, 'last90days': 90,
             'thisWeek': 7, 'thisMonth': 31, 'thisYear': 366,
-            'lastWeek': 7, 'lastMonth': 31, 'lastYear': 366, 'custom': 0,
+            'lastWeek': 7, 'lastMonth': 31, 'lastYear': 366,
+            'nextWeek':7, 'nextMonth':31, 'nextYear':366,
+            'custom': 0,
         };
 
 
@@ -42,8 +44,10 @@ export class Builder {
                 focusout: (event) => {
                     if (!event.currentTarget.contains(event.relatedTarget)) {
                         this.dp.picker.classList.remove('rjs-focus');
-                        this.dp.picker.setAttribute('aria-expanded', 'false');
-                        this.dp.picker.querySelector('.rjs-wrapper').setAttribute('inert', '');
+                        if (!this.dp.picker.classList.contains('rjs-focus-force')) {
+                            this.dp.picker.setAttribute('aria-expanded', 'false');
+                            this.dp.picker.querySelector('.rjs-wrapper').setAttribute('inert', '');
+                        }
                     }
                 }
             },
@@ -98,7 +102,7 @@ export class Builder {
         return {
             class:'rjs-periods',
             attr:{tabindex:'0'},
-            children:filterPeriods(this.periods, this.o.maxRange).map(period => {
+            children:filterPeriods(this.periods, this.dp.startOfWeek, this.o.maxRange, this.o.minDate, this.o.maxDate).map(period => {
                 return {
                     class:'rjs-period',
                     attr:{tabindex:'-1', 'data-period':period},
@@ -135,7 +139,53 @@ export class Builder {
                             html:icons.arrowRight,
                             on:{click:this.dp.prevMonth.bind(this.dp)}
                         },
-                        {class:'rjs-label', attr:{'aria-live':'polite'}},
+                        {class:'rjs-displayDate', children:[
+
+                            {class:'rjs-hiddenlabel', attr:{'aria-live':'polite'}},
+
+                            {class:'rjs-displayMonth', children:[
+                                {class:'rjs-label'},
+                                {class:'rjs-icon', html:icons.arrowDown},
+                                {
+                                    class:'rjs-dropDown',
+                                    attr:{tabindex:'0', role:'button', 'aria-haspopup':'listbox', 'aria-expanded':"false"},
+                                    on:{
+                                        focus:(event) => event.target.closest('.rjs-dropDown').setAttribute('aria-expanded', 'true'),
+                                        blur:(event) => event.target.closest('.rjs-dropDown').setAttribute('aria-expanded', 'false'),
+                                    },
+                                    children:this.dp.locale.monthsLong.map((item, idx) => {
+                                        return {class:'rjs-dropDownItem', text:item, attr:{'data-month':idx + 1}}
+                                    }),
+                                    on:{keydown:this.dp.e.headDisplayDateDropDownKeyDownHandler.bind(this.dp.e)}
+                                }
+                            ], on:{click:this.dp.e.headDisplayDateMonthClickHandler.bind(this.dp.e)}},
+
+                            {class:'rjs-displayYear', children:[
+                                {class:'rjs-label'},
+                                {class:'rjs-icon', html:icons.arrowDown},
+                                {
+                                    class:'rjs-dropDown',
+                                    attr:{tabindex:'0', role:'button', 'aria-haspopup':'listbox', 'aria-expanded':"false"},
+                                    on:{
+                                        focus:(event) => event.target.closest('.rjs-dropDown').setAttribute('aria-expanded', 'true'),
+                                        blur:(event) => event.target.closest('.rjs-dropDown').setAttribute('aria-expanded', 'false'),
+                                    },
+                                    children:[
+                                        () => {
+                                            const currentYear = new Date().getFullYear();
+                                            const minYear = this.o.minDate?.year ?? currentYear - 100;
+                                            const maxYear = this.o.maxDate?.year ?? currentYear + 20;
+                                            const arr = Array.from({length:maxYear - minYear + 1}, (yr, idx) => minYear + idx);
+                                            return arr.map( item => {
+                                                return {class:'rjs-dropDownItem', text:item, attr:{'data-year':item}}
+                                            })
+                                        }
+                                    ],
+                                    on:{keydown:this.dp.e.headDisplayDateDropDownKeyDownHandler.bind(this.dp.e)}
+                                }
+                            ], on:{click:this.dp.e.headDisplayDateYearClickHandler.bind(this.dp.e)}},
+
+                        ]},
                         {
                             tag:'button',
                             attr:{'aria-label':'Next month'},
@@ -187,5 +237,6 @@ export class Builder {
                 ]
             }
     }
+
     
 }

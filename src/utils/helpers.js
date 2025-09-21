@@ -1,14 +1,39 @@
 
-export function filterPeriods(periods, maxRange = null) {
-      if (!maxRange) return Object.keys(periods);
+export function filterPeriods(periods, startOfWeek, maxRange = null, minDate = null, maxDate = null) {
 
-      const out = [];
+    let out =  Object.entries({...periods});
 
-      Object.entries(periods).forEach(([periodName, periodMaxRange]) => {
-      if (maxRange >= periodMaxRange) out.push(periodName);
-      })
+    if (maxRange) {
+        out = out
+            .filter(([periodName, periodMaxRange]) => maxRange >= periodMaxRange);
+    }
 
-      return out;
+    if (maxDate && minDate) {
+        out = out
+            .filter(([periodName, periodMaxRange]) => {
+                const range = getPresetRanges(startOfWeek, periodName);
+                if (!range[0] && !range[1]) return true;
+                if (!range[1]) return toTimestamp(range[0]) >= toTimestamp(minDate);
+                if (!range[0]) return toTimestamp(range[1]) <= toTimestamp(maxDate);
+                return toTimestamp(range[1]) <= toTimestamp(maxDate) && toTimestamp(range[0]) >= toTimestamp(minDate);
+            });
+    } else if (maxDate) {
+        out = out
+            .filter(([periodName, periodMaxRange]) => {
+                const range = getPresetRanges(startOfWeek, periodName);
+                if (!range[1]) return true;
+                return toTimestamp(range[1]) <= toTimestamp(maxDate);
+            });
+    } else if (minDate) {
+        out = out
+            .filter(([periodName, periodMaxRange]) => {
+                const range = getPresetRanges(startOfWeek, periodName);
+                if (!range[0]) return true;
+                return toTimestamp(range[0]) >= toTimestamp(minDate);
+            });
+    }
+
+    return out.map(([periodName]) => periodName);
 
 }
 
@@ -164,6 +189,25 @@ export function getPresetRanges(_startOfWeek, range = null) {
         lastYear:   (() => {
             const start = startOfYear(new Date(today.getFullYear() - 1, 0, 1));
             const end   = endOfYear(new Date(today.getFullYear() - 1, 11, 31));
+            return [toDateObj(start), toDateObj(end)];
+        })(),
+
+        nextWeek:   (() => {
+            const start = addDays(startOfWeek(today, _startOfWeek), +7);
+            const end   = addDays(start, 6);
+            return [toDateObj(start), toDateObj(end)];
+        })(),
+
+
+        nextMonth:  (() => {
+            const start = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+            const end   = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+            return [toDateObj(start), toDateObj(end)];
+        })(),
+
+        nextYear:   (() => {
+            const start = startOfYear(new Date(today.getFullYear() + 1, 0, 1));
+            const end   = endOfYear(new Date(today.getFullYear() + 1, 11, 31));
             return [toDateObj(start), toDateObj(end)];
         })(),
 
